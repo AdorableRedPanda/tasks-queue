@@ -4,8 +4,8 @@ import { AbstractTask } from './AbstractTask';
 import { RootTask } from './RootTask';
 
 interface EntryPayload {
-	attempts: number;
 	input: string;
+	maxAttempts: number;
 }
 
 export class EntryTask extends AbstractTask<EntryPayload> {
@@ -15,6 +15,6 @@ export class EntryTask extends AbstractTask<EntryPayload> {
 	}
 
 	async execute() {
-		throw new Error('Method not implemented.');
+		return [];
 	}
 }
