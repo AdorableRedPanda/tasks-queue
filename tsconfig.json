@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"skipLibCheck": true,
+		"strict": true,
+		"moduleResolution": "bundler",
+		"baseUrl": ".",
+		"paths": {
+			"src/*": ["src/*"],
+			"@/*": ["src/*"]
+		},
+		"target": "ES2020"
+	}
+}
