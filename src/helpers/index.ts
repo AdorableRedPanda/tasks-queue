@@ -1,1 +1,2 @@
-export { wait } from './wait'
+export { buildId } from './buildId';
+export { wait } from './wait';
