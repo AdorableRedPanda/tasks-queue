@@ -1,7 +1,9 @@
 import type { Context } from 'hono';
 
+import type { Action, MessageData, TaskItem } from '@/types';
+
 import { executeTasks } from '@/executeTasks';
-import { buildId, wait } from '@/helpers';
+import { buildId, stringifyTask, wait } from '@/helpers';
 import { EntryTask } from '@/tasks';
 
 export const handle = async (c: Context) => {
@@ -9,12 +11,21 @@ export const handle = async (c: Context) => {
 
 	const requestId = buildId();
 
-	const entry = new EntryTask(
-		{ input: 'hello world', maxAttempts: 4 },
-		requestId,
-	);
+	const entry = new EntryTask({ maxIterations: 4 }, requestId);
 
-	await executeTasks([entry]);
+	const log: Action<TaskItem> = (task) => {
+		console.info(stringifyTask(task));
+	};
 
-	return c.json({ status: 'ok' });
+	const onMessage: Action<MessageData> = (message) => {
+		console.info('Message:', message.payload);
+	};
+
+	try {
+		await executeTasks([entry], log, onMessage);
+		return c.json({ status: 'ok' });
+	} catch (error) {
+		const message = (error as Error).message;
+		return c.json({ message }, 500);
+	}
 };

@@ -2,7 +2,7 @@ import type { Executable, TaskResult, TaskType } from '@/types';
 
 import { RootTask } from './RootTask';
 
-export abstract class AbstractTask<TPayload extends {}>
+export abstract class AbstractTask<TPayload extends object = object>
 	extends RootTask<TPayload>
 	implements Executable
 {

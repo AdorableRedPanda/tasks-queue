@@ -1,8 +1,14 @@
+export type Action<TArg> = (arg: TArg) => void;
+
 export interface Executable {
 	execute(): Promise<TaskResult>;
 }
 
 export type ID = string & { readonly brand: ID };
+
+export interface MessageData {
+	payload: string;
+}
 
 export interface TaskData<TPayload> {
 	id: ID;
@@ -13,6 +19,8 @@ export interface TaskData<TPayload> {
 
 export type TaskItem = Executable & TaskData<unknown>;
 
-export type TaskResult = TaskItem[];
+export type TaskResult =
+	| { data: MessageData; type: 'message' }
+	| { data: TaskItem[]; type: 'push' };
 
-export type TaskType = 'attempt' | 'entry' | 'terminal';
+export type TaskType = 'entry' | 'iteration' | 'message';

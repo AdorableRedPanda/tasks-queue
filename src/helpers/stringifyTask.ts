@@ -1,8 +1,8 @@
 import type { TaskData } from '@/types';
 
 export const stringifyTask = <TPayload>({
+	id,
 	payload,
-	requestId,
 	type,
 }: TaskData<TPayload>) =>
-	`[${type}] requestId: ${requestId}, payload: ${JSON.stringify(payload)}`;
+	`[${type}, ${id}] payload: ${JSON.stringify(payload)}`;

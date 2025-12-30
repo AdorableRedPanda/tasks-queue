@@ -1,11 +1,12 @@
-import type { ID } from '@/types';
+import type { ID, TaskResult } from '@/types';
 
 import { AbstractTask } from './AbstractTask';
+import { IterationTask } from './IterationTask';
+import { MessageTask } from './MessageTask';
 import { RootTask } from './RootTask';
 
 interface EntryPayload {
-	input: string;
-	maxAttempts: number;
+	maxIterations: number;
 }
 
 export class EntryTask extends AbstractTask<EntryPayload> {
@@ -14,7 +15,16 @@ export class EntryTask extends AbstractTask<EntryPayload> {
 		super(payload, 'entry', root);
 	}
 
-	async execute() {
-		return [];
+	async execute(): Promise<TaskResult> {
+		return Promise.resolve({
+			data: [
+				new MessageTask({ payload: `Start iterations` }, this),
+				new IterationTask(
+					{ current: 0, max: this.payload.maxIterations },
+					this,
+				),
+			],
+			type: 'push',
+		});
 	}
 }

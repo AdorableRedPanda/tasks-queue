@@ -1,15 +1,27 @@
-import type { TaskItem } from '@/types';
+import type { Action, MessageData, TaskItem } from '@/types';
 
-import { createQueue, stringifyTask } from '@/helpers';
+import { createQueue, validateTimeout } from '@/helpers';
 
-export const executeTasks = async (tasks: TaskItem[]) => {
+export const executeTasks = async (
+	tasks: TaskItem[],
+	log: Action<TaskItem>,
+	onMessage: Action<MessageData>,
+) => {
 	const queue = createQueue(tasks);
+	const start = new Date();
 
 	for await (const task of queue) {
-		console.info(stringifyTask(task));
+		validateTimeout(start);
+		log(task);
 
 		const next = await task.execute();
 
-		queue.push(...next);
+		if (next.type === 'push') {
+			queue.push(...next.data);
+		}
+
+		if (next.type === 'message') {
+			onMessage(next.data);
+		}
 	}
 };
