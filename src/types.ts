@@ -8,6 +8,7 @@ export type ID = string & { readonly brand: ID };
 
 export interface MessageData {
 	payload: string;
+	type: MessageType;
 }
 
 export interface TaskData<TPayload> {
@@ -24,3 +25,5 @@ export type TaskResult =
 	| { data: TaskItem[]; type: 'push' };
 
 export type TaskType = 'entry' | 'iteration' | 'message';
+
+type MessageType = 'complete' | 'progress' | 'start';

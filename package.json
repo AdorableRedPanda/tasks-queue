@@ -5,16 +5,17 @@
 	"scripts": {
 		"start": "bun run src/index.ts",
 		"lint:biome": "biome format --write && biome lint --write",
-		"dev": "bun run --watch src/index.ts",
 		"lint:eslint": "eslint ./src --fix",
 		"lint": "bun run lint:biome && bun run lint:eslint",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"dev": "bun --watch src/ui/index.tsx"
 	},
 	"author": "",
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
-		"hono": "4.11.2"
+		"ink": "6.6.0",
+		"react": "19.2.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.10",

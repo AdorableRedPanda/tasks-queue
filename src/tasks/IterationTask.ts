@@ -1,4 +1,4 @@
-import type { TaskResult } from '@/types';
+import type { TaskItem, TaskResult } from '@/types';
 
 import { wait } from '@/helpers';
 
@@ -18,18 +18,37 @@ export class IterationTask extends AbstractTask<IterationPayload> {
 	async execute(): Promise<TaskResult> {
 		const { current, max } = this.payload;
 
-		await wait(100 * current);
+		await wait(500 * current);
 
-		const nextTask =
-			current < max
-				? new IterationTask({ current: current + 1, max }, this)
-				: new MessageTask(
-						{ payload: `Max iterations count exceeded (${max})` },
-						this,
-					);
+		const tasks: TaskItem[] = [];
+
+		if (current === Math.round(max / 2)) {
+			tasks.push(
+				new MessageTask(
+					{ payload: 'Half iterations exceeded', type: 'progress' },
+					this,
+				),
+			);
+		}
+
+		if (current < max) {
+			tasks.push(new IterationTask({ current: current + 1, max }, this));
+		}
+
+		if (current >= max) {
+			tasks.push(
+				new MessageTask(
+					{
+						payload: `Max iterations count exceeded (${max})`,
+						type: 'complete',
+					},
+					this,
+				),
+			);
+		}
 
 		return {
-			data: [nextTask],
+			data: tasks,
 			type: 'push',
 		};
 	}

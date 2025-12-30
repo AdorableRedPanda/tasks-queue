@@ -6,7 +6,8 @@ import { MessageTask } from './MessageTask';
 import { RootTask } from './RootTask';
 
 interface EntryPayload {
-	maxIterations: number;
+	input: string;
+	iterations: number;
 }
 
 export class EntryTask extends AbstractTask<EntryPayload> {
@@ -18,11 +19,8 @@ export class EntryTask extends AbstractTask<EntryPayload> {
 	async execute(): Promise<TaskResult> {
 		return Promise.resolve({
 			data: [
-				new MessageTask({ payload: `Start iterations` }, this),
-				new IterationTask(
-					{ current: 0, max: this.payload.maxIterations },
-					this,
-				),
+				new MessageTask({ payload: `Start iterations`, type: 'start' }, this),
+				new IterationTask({ current: 0, max: this.payload.iterations }, this),
 			],
 			type: 'push',
 		});
