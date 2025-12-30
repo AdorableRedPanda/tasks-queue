@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
-		"start": "bun run src/index.ts",
 		"lint:biome": "biome format --write && biome lint --write",
 		"lint:eslint": "eslint ./src --fix",
 		"lint": "bun run lint:biome && bun run lint:eslint",
